@@ -3,7 +3,7 @@
     <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.2rem;">
       <span style="color: var(--primary);">&lt;</span>WYNE.HAN<span style="color: var(--primary);">/&gt;</span>
     </div>
-    
+
     <div style="display: flex; align-items: center; gap: 2rem;">
       <div style="display: flex; gap: 1.5rem;">
         <a href="#home" style="color: var(--text-main); text-decoration: none; font-weight: 500; font-size: 0.9rem;">{{ t().navHome }}</a>
@@ -37,14 +37,14 @@
         <a href="#projects" class="btn-primary">{{ t().heroCta }}</a>
         <div style="display: flex; gap: 1.2rem;">
           <a href="https://github.com/WyneZ" target="_blank" style="color: var(--text-muted); font-size: 1.4rem;"><i class="fab fa-github"></i></a>
-          <a href="https://linkedin.com/in/wyne-kyaw-han" target="_blank" style="color: var(--text-muted); font-size: 1.4rem;"><i class="fab fa-linkedin"></i></a>
+          <a href="https://www.linkedin.com/in/wyne-kyaw-han-b1b4181a3/" target="_blank" style="color: var(--text-muted); font-size: 1.4rem;"><i class="fab fa-linkedin"></i></a>
         </div>
       </div>
     </div>
-    
+
     <div style="flex: 0.8;">
       <div style="border: 1px solid var(--border); padding: 8px; border-radius: 4px; background: var(--bg-card);">
-        <img src="/hero.jpg" alt="Wyne Kyaw Han" style="width: 100%; border-radius: 2px; display: block; filter: grayscale(100%);">
+        <img src="hero.jpg" alt="Wyne Kyaw Han" style="width: 100%; border-radius: 2px; display: block; filter: grayscale(100%);">
       </div>
     </div>
   </section>
@@ -74,17 +74,16 @@
   <!-- Skills Section -->
   <section id="skills">
     <h2 style="font-size: 2rem; margin-bottom: 3rem; border-left: 4px solid var(--primary); padding-left: 1rem;">{{ t().skillsTitle }}</h2>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.5rem; justify-items: center;">
       @for (skill of skills(); track skill.name) {
-        <div class="card" style="display: flex; align-items: center; gap: 1.5rem;">
-          <div style="font-size: 2rem;">{{skill.icon}}</div>
-          <div style="flex: 1;">
-            <div style="font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem;">{{skill.name}}</div>
-            <div style="width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;">
-              <div [style.width]="skill.level + '%'" style="height: 100%; background: var(--primary);"></div>
-            </div>
-          </div>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted);">{{skill.level}}%</div>
+        <div style="display: grid; place-items: center; padding: 1rem;">
+          <img
+            [src]="skill.icon"
+            [alt]="skill.name + ' icon'"
+            [style.width]="skill.name === 'Express' ? '4rem' : '3rem'"
+            [style.height]="skill.name === 'Express' ? '4rem' : '3rem'"
+            style="object-fit: contain;"
+          />
         </div>
       }
     </div>
@@ -106,7 +105,12 @@
               </div>
             } @else {
               <div style="height: 300px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 5rem;">
-                {{ project.icon }}
+                <ng-container *ngIf="project.icon.startsWith('/'); else iconText">
+                  <img [src]="project.icon" [alt]="project.title + ' icon'" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+                </ng-container>
+                <ng-template #iconText>
+                  {{ project.icon }}
+                </ng-template>
               </div>
             }
           </div>
@@ -114,9 +118,14 @@
             <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--primary); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">{{project.tech}}</div>
             <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">{{project.title}}</h3>
             <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 2rem; line-height: 1.8;">{{project.description}}</p>
-            <a [href]="project.link" target="_blank" class="btn-primary" style="font-size: 0.9rem; padding: 0.8rem 2rem;">
-              VIEW REPOSITORY <i class="fas fa-external-link-alt" style="margin-left: 8px; font-size: 0.8rem;"></i>
-            </a>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <a *ngIf="project.repoLink" [href]="project.repoLink" target="_blank" class="btn-primary" style="font-size: 0.9rem; padding: 0.8rem 2rem;">
+                VIEW REPOSITORY <i class="fas fa-external-link-alt" style="margin-left: 8px; font-size: 0.8rem;"></i>
+              </a>
+              <a *ngIf="project.deployLink" [href]="project.deployLink" target="_blank" class="btn-primary" style="font-size: 0.9rem; padding: 0.8rem 2rem;">
+                DEPLOYMENT LINK<i class="fas fa-external-link-alt" style="margin-left: 8px; font-size: 0.8rem;"></i>
+              </a>
+            </div>
           </div>
         </div>
       }
